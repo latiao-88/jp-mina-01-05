@@ -1,335 +1,250 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- 图标设置为 1-5 -->
-    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=1-5&background=ff3b30&color=fff&size=512&font-size=0.5&length=3">
-
-    <title>第1-5课 综合练习</title>
-    <style>
-        :root { --primary: #007aff; --bg: #f2f2f7; --mask-bg: #d1d1d6; }
-        body { font-family: -apple-system, "Helvetica Neue", sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        
-        /* 顶部控制区 */
-        .header { background: #fff; border-bottom: 1px solid #ddd; z-index: 10; flex-shrink: 0; display: flex; flex-direction: column;}
-        .title-bar { padding: 12px; text-align: center; font-weight: bold; font-size: 1.1rem; border-bottom: 1px solid #eee;}
-        .filter-bar { padding: 10px; display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; align-items: center;}
-        
-        /* 复选框样式 */
-        .filter-label { display: flex; align-items: center; background: #eee; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
-        .filter-label input { margin-right: 6px; }
-        .filter-label.checked { background: #e3f2fd; color: #007aff; font-weight: bold; border: 1px solid #007aff; }
-
-        .container { flex: 1; padding: 15px; overflow-y: auto; display: flex; justify-content: center; align-items: flex-start; -webkit-overflow-scrolling: touch;}
-        .card { background: #fff; width: 100%; max-width: 500px; border-radius: 16px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center; margin-bottom: 40px; position: relative;}
-        
-        /* 课程角标 */
-        .lesson-badge { position: absolute; top: 10px; right: 10px; background: #ff9500; color: white; font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: bold;}
-        .tag { background: #e5e5ea; color: #666; padding: 4px 10px; border-radius: 6px; font-size: 0.9rem; margin-bottom: 15px; display: inline-block; font-weight: bold;}
-
-        /* === 布局 === */
-        .dialogue-row { display: flex; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
-        .play-col { width: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 10px; padding-top: 5px; }
-        .play-icon { font-size: 1.4rem; color: var(--primary); cursor: pointer; background: #eef7ff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .play-icon:active { background: #007aff; color: white; transform: scale(0.9); }
-        .text-col { flex: 1; text-align: left; }
-        
-        /* 角色标签 */
-        .role-tag { font-size: 0.7rem; font-weight: bold; color: white; padding: 2px 6px; border-radius: 4px; margin-right: 5px; vertical-align: middle; display: inline-block; margin-bottom: 4px;}
-        .role-m { background-color: #5856d6; } 
-        .role-f { background-color: #ff2d55; }
-        .role-special { background-color: #007aff; } /* 特定角色 */
-
-        /* 遮挡条 */
-        .text-block { transition: all 0.2s; border-radius: 6px; padding: 6px 8px; cursor: pointer; display: block; margin-bottom: 6px; line-height: 1.5; border: 1px solid transparent; }
-        .masked { background-color: var(--mask-bg); color: transparent !important; position: relative; border-color: transparent; user-select: none;}
-        .masked::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 8px; height: 8px; background: #999; border-radius: 50%; }
-
-        .jp-text { font-size: 1.15rem; font-weight: bold; color: #000; }
-        .cn-text { font-size: 0.95rem; color: #666; }
-        .playing-row { background-color: #f0f9ff; border-radius: 8px; }
-
-        /* 底部控制栏 */
-        .controls { padding: 10px 15px; background: #fff; border-top: 1px solid #ddd; flex-shrink: 0; padding-bottom: calc(10px + env(safe-area-inset-bottom));}
-        .row { display: flex; gap: 8px; margin-bottom: 8px; }
-        button { border: none; padding: 12px; border-radius: 10px; font-size: 0.9rem; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; touch-action: manipulation;}
-        .btn-green { background: #34c759; color: white; width: 100%; font-size: 1rem; margin-bottom: 8px; padding: 12px;}
-        .btn-blue { background: #007aff; color: white; flex: 1; }
-        .btn-nav { background: #eee; color: #333; flex: 1; }
-        .btn-toggle { background: #fff; border: 1px solid #ccc; color: #333; flex: 1; }
-        .btn-toggle.active { background: #5ac8fa; color: white; border: none; }
-        #status-bar { font-size: 10px; color: #999; text-align: center; margin-top: 2px; height: 14px;}
-        
-        .empty-tip { color: #999; margin-top: 50px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>01-05 - PiggyFlash Player</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'M PLUS Rounded 1c', sans-serif; background-color: #9BE3F5; color: #334155; }
+    .piggy-card { box-shadow: 6px 6px 0px rgba(0,0,0,0.15); border: 4px solid white; border-radius: 2rem; background: #FFF9C4; }
+    .piggy-btn:active { transform: translateY(4px); box-shadow: none !important; }
+    .shadow-toon { box-shadow: 6px 6px 0px rgba(0,0,0,0.15); }
+    ruby { ruby-position: over; } rt { font-size: 0.55em; color: #E53030; font-weight: 900; }
+  </style>
+  <script type="importmap">{ "imports": { "react": "https://esm.sh/react@18.2.0", "react-dom/client": "https://esm.sh/react-dom@18.2.0/client", "lucide-react": "https://esm.sh/lucide-react@0.263.1" } }</script>
 </head>
-<body>
+<body class="h-screen overflow-hidden text-slate-700">
+  <div id="root" class="h-full relative z-10"></div>
+  <script type="module">
+    import React, { useState, useEffect, useRef, useMemo } from 'react';
+    import ReactDOM from 'react-dom/client';
+    import { Play, Pause, SkipForward, SkipBack, Shuffle, Repeat, Infinity as InfinityIcon, Eye, EyeOff, Layers } from 'lucide-react';
+    
+    const INITIAL_DATA = [{"id":"card-1765889429406-0","original":"マイク・ミラーさんですか。","translation":"您是迈克·米勒先生吗？","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":0,"nativePitch":1},{"id":"card-1765889429406-1","original":"……はい、マイク・ミラーです。","translation":"……是的，我是迈克·米勒。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":1,"nativePitch":1},{"id":"card-1765889429406-2","original":"ミラーさんは 学生 ですか。","translation":"米勒先生是学生吗？","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":2,"nativePitch":1},{"id":"card-1765889429406-3","original":"……いいえ、学生 じゃ ありません。","translation":"……不，我不是学生。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":3,"nativePitch":1},{"id":"card-1765889429406-4","original":"ワンさんは 銀行員 ですか。","translation":"王先生是银行职员吗？","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":4,"nativePitch":1},{"id":"card-1765889429406-5","original":"……いいえ、銀行員 じゃ ありません。医者 です。","translation":"……不，王先生不是银行职员。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":5,"nativePitch":1},{"id":"card-1765889429406-6","original":"あの 方 は どなたですか。","translation":"他是医生。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":6,"nativePitch":1},{"id":"card-1765889429406-7","original":"……ワットさんです。","translation":"那位是谁？","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":7,"nativePitch":1},{"id":"card-1765889429406-8","original":"さくら大学の 先生 です。","translation":"……是瓦特先生。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":8,"nativePitch":1},{"id":"card-1765889429406-9","original":"グプタさんは 会社員 ですか。","translation":"他是樱花大学的老师。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":9,"nativePitch":1},{"id":"card-1765889429406-10","original":"……はい、 会社員 です。","translation":"古普塔先生是公司职员吗？","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":10,"nativePitch":1},{"id":"card-1765889429406-11","original":"カリナさんも 会社員 ですか。","translation":"……是的，他是公司职员。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":11,"nativePitch":1},{"id":"card-1765889429406-12","original":"……いいえ。","translation":"卡琳娜小姐也是公司职员吗？","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":12,"nativePitch":1},{"id":"card-1765889429406-13","original":"学生 です。","translation":"……不。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":13,"nativePitch":1},{"id":"card-1765889429406-14","original":"テレーザちゃんは 何歳 ですか。","translation":"她是学生。","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":14,"nativePitch":1},{"id":"card-1765889429406-15","original":"……9歳 です。","translation":"特蕾莎几岁了？","groupId":"group-1765733983421","groupTitle":"01-1","groupOrder":15,"nativePitch":1},{"id":"card-1765734168357-0","original":"おはよう ございます。","translation":"佐藤：早上好。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":0,"speaker":"佐藤","voiceName":"Puck","nativePitch":1.25},{"id":"card-1765734168357-1","original":"おはよう ございます。","translation":"山田：早上好。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":1,"speaker":"山田","voiceName":"Kore","nativePitch":0.9},{"id":"card-1765734168357-2","original":"佐藤さん、こちらは マイク・ミラーさんです。","translation":"佐藤先生，这位是迈克·米勒先生。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":2,"speaker":"山田","voiceName":"Kore","nativePitch":0.9},{"id":"card-1765734168357-3","original":"初めまして。","translation":"米勒：初次见面。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":3,"speaker":"ミラー","voiceName":"Aoede","nativePitch":0.9},{"id":"card-1765734168357-4","original":"マイク・ミラーです。","translation":"我是迈克·米勒。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":4,"speaker":"ミラー","voiceName":"Aoede","nativePitch":0.9},{"id":"card-1765734168357-5","original":"アメリカから 来ました。","translation":"我来自美国。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":5,"speaker":"ミラー","voiceName":"Aoede","nativePitch":0.9},{"id":"card-1765734168357-6","original":"どうぞ よろしく。","translation":"请多关照。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":6,"speaker":"ミラー","voiceName":"Aoede","nativePitch":0.9},{"id":"card-1765734168357-7","original":"佐藤けい子です。","translation":"佐藤：我是佐藤惠子。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":7,"speaker":"佐藤","voiceName":"Puck","nativePitch":1.25},{"id":"card-1765734168357-8","original":"どうぞ よろしく。","translation":"请多关照。","groupId":"group-1765734016142","groupTitle":"01-2-初めまして","groupOrder":8,"speaker":"佐藤","voiceName":"Puck","nativePitch":1.25},{"id":"card-1765889848293-0","original":"これは ボールペンですか。","translation":"这是圆珠笔吗？","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":0,"nativePitch":1},{"id":"card-1765889848293-1","original":"……はい、そうです。","translation":"……是的。","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":1,"nativePitch":1},{"id":"card-1765889848293-2","original":"それは ノートですか。","translation":"那是笔记本吗？","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":2,"nativePitch":1},{"id":"card-1765889848293-3","original":"……いいえ、手帳 です。","translation":"……不，是日程本。","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":3,"nativePitch":1},{"id":"card-1765889848293-4","original":"それは 何ですか。","translation":"那是什么？","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":4,"nativePitch":1},{"id":"card-1765889848293-5","original":"名刺です。","translation":"是名片。","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":5,"nativePitch":1},{"id":"card-1765889848293-6","original":"これは 「9」ですか、「7」ですか。","translation":"这是“9”还是“7”？","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":6,"nativePitch":1},{"id":"card-1765889848293-7","original":"……「9」です。","translation":"……是“9”。","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":7,"nativePitch":1},{"id":"card-1765889848293-8","original":"それは 何の 雑誌ですか。","translation":"那是什么杂志？","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":8,"nativePitch":1},{"id":"card-1765889848293-9","original":"……コンピューターの 雑誌です。","translation":"……是电脑杂志。","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":9,"nativePitch":1},{"id":"card-1765889848293-10","original":"あれは だれの かばんですか。","translation":"那是谁的包？","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":10,"nativePitch":1},{"id":"card-1765889848293-11","original":"佐藤さんの かばんです。","translation":"是佐藤先生的包。","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":11,"nativePitch":1},{"id":"card-1765889848293-12","original":"これは ミラーさんのですか。","translation":"这是米勒先生的吗？","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":12,"nativePitch":1},{"id":"card-1765889848293-13","original":"……いいえ、わたしのじゃ ありません。","translation":"……不，不是我的。","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":13,"nativePitch":1},{"id":"card-1765889848293-14","original":"この かぎは だれのですか。","translation":"这把钥匙是谁的？","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":14,"nativePitch":1},{"id":"card-1765889848293-15","original":"……わたしのです。","translation":"……是我的。","groupId":"group-1765889848292","groupTitle":"02-1","groupOrder":15,"nativePitch":1},{"id":"card-1765889966083-0","original":"はい。どなたですか。","translation":"山田一郎：是的。请问您是哪位？","groupId":"group-1765889966082","groupTitle":"02-2-これから お世話になります","groupOrder":0,"speaker":"山田一郎","voiceName":"Puck","nativePitch":1},{"id":"card-1765889966083-1","original":"408の サントスです。","translation":"桑托斯：我是408室的桑托斯。","groupId":"group-1765889966082","groupTitle":"02-2-これから お世話になります","groupOrder":1,"speaker":"サントス","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765889966083-2","original":"こんにちは。サントスです。これから お世話になります。","translation":"桑托斯：你好。我是桑托斯。今后请多关照。","groupId":"group-1765889966082","groupTitle":"02-2-これから お世話になります","groupOrder":2,"speaker":"サントス","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765889966083-3","original":"どうぞ よろしく お願いします。","translation":"请多关照。","groupId":"group-1765889966082","groupTitle":"02-2-これから お世話になります","groupOrder":3,"speaker":"サントス","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765889966083-4","original":"こちらこそ よろしく お願いします。","translation":"山田一郎：我也请您多关照。","groupId":"group-1765889966082","groupTitle":"02-2-これから お世話になります","groupOrder":4,"speaker":"山田一郎","voiceName":"Puck","nativePitch":1},{"id":"card-1765889966083-5","original":"あのう、これ、コーヒーです。どうぞ。","translation":"桑托斯：那个，这是咖啡。请收下。","groupId":"group-1765889966082","groupTitle":"02-2-これから お世話になります","groupOrder":5,"speaker":"サントス","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765889966083-6","original":"どうも ありがとう ございます。","translation":"山田一郎：非常感谢。","groupId":"group-1765889966082","groupTitle":"02-2-これから お世話になります","groupOrder":6,"speaker":"山田一郎","voiceName":"Puck","nativePitch":1},{"id":"card-1765890025330-0","original":"この 傘は ミラーさんのですか。","translation":"A: 这把伞是米勒先生的吗？","groupId":"group-1765890025330","groupTitle":"02-3","groupOrder":0,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765890025330-1","original":"いいえ、違います。","translation":"B: 不，不是的。","groupId":"group-1765890025330","groupTitle":"02-3","groupOrder":1,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765890025330-2","original":"だれのですか。","translation":"A: 是谁的？","groupId":"group-1765890025330","groupTitle":"02-3","groupOrder":2,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765890025330-3","original":"あ、わたしのです。ありがとうございます。","translation":"C: 啊，是我的。谢谢。","groupId":"group-1765890025330","groupTitle":"02-3","groupOrder":3,"speaker":"C","voiceName":"Puck","nativePitch":1},{"id":"card-1765890217793-0","original":"ここは 新大阪ですか。","translation":"这里是新大阪吗？","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":0,"nativePitch":1},{"id":"card-1765890217793-1","original":"……はい、そうです。","translation":"……是的。","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":1,"nativePitch":1},{"id":"card-1765890217793-2","original":"トイレは どこですか。","translation":"洗手间在哪里？","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":2,"nativePitch":1},{"id":"card-1765890217793-3","original":"……あそこです。","translation":"……在那边。","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":3,"nativePitch":1},{"id":"card-1765890217793-4","original":"山田さんは どこですか。","translation":"山田先生在哪里？","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":4,"nativePitch":1},{"id":"card-1765890217793-5","original":"会議室です。","translation":"在会议室。","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":5,"nativePitch":1},{"id":"card-1765890217793-6","original":"事務所は どちらですか。","translation":"办公室是哪边？","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":6,"nativePitch":1},{"id":"card-1765890217793-7","original":"……あちらです。","translation":"……在那边。","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":7,"nativePitch":1},{"id":"card-1765890217793-8","original":"お国は どちらですか。","translation":"您的国家是哪里？","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":8,"nativePitch":1},{"id":"card-1765890217793-9","original":"……アメリカです。","translation":"……是美国。","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":9,"nativePitch":1},{"id":"card-1765890217793-10","original":"それは どこの 靴ですか。","translation":"那是哪里的鞋子？","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":10,"nativePitch":1},{"id":"card-1765890217793-11","original":"……イタリアの 靴です。","translation":"……是意大利的鞋子。","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":11,"nativePitch":1},{"id":"card-1765890217793-12","original":"この 時計は いくらですか。","translation":"这个手表多少钱？","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":12,"nativePitch":1},{"id":"card-1765890217793-13","original":"18,600 円です。","translation":"18,600日元。","groupId":"group-1765890217793","groupTitle":"03-1","groupOrder":13,"nativePitch":1},{"id":"card-1765890373261-0","original":"いらっしゃいませ。","translation":"店员A: 欢迎光临。","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":0,"speaker":"店員A","voiceName":"Puck","nativePitch":1},{"id":"card-1765890373261-1","original":"すみません。ワイン売り場は どこですか。","translation":"玛丽亚: 不好意思。葡萄酒区在哪里？","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":1,"speaker":"マリア","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765890373261-2","original":"地下1階です。","translation":"店员A: 在地下1层。","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":2,"speaker":"店員A","voiceName":"Puck","nativePitch":1},{"id":"card-1765890373261-3","original":"どうも。","translation":"玛丽亚: 谢谢。","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":3,"speaker":"マリア","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765890373261-4","original":"すみません。その ワインを 見せて ください。","translation":"玛丽亚: 不好意思。请给我看看那个葡萄酒。","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":4,"speaker":"マリア","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765890373261-5","original":"はい、どうぞ。","translation":"店员B: 好的，请。","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":5,"speaker":"店員B","voiceName":"Aoede","nativePitch":1.25},{"id":"card-1765890373261-6","original":"これは どこの ワインですか。","translation":"玛丽亚: 这是哪里的葡萄酒？","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":6,"speaker":"マリア","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765890373261-7","original":"日本のです。","translation":"店员B: 是日本的。","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":7,"speaker":"店員B","voiceName":"Aoede","nativePitch":1.25},{"id":"card-1765890373261-8","original":"いくらですか。","translation":"玛丽亚: 多少钱？","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":8,"speaker":"マリア","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765890373261-9","original":"2,500円です。","translation":"店员B: 2,500日元。","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":9,"speaker":"店員B","voiceName":"Aoede","nativePitch":1.25},{"id":"card-1765890373261-10","original":"じゃ、これを ください。","translation":"玛丽亚: 那么，请给我这个。","groupId":"group-1765890373260","groupTitle":"03-2-これを ください","groupOrder":10,"speaker":"マリア","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765890437225-0","original":"お国はどちらですか。","translation":"A: 您是哪个国家的？","groupId":"group-1765890437225","groupTitle":"03-3","groupOrder":0,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765890437225-1","original":"タイです。","translation":"B: 泰国。","groupId":"group-1765890437225","groupTitle":"03-3","groupOrder":1,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765890437225-2","original":"うちはどちらですか。","translation":"A: 您家在哪里？","groupId":"group-1765890437225","groupTitle":"03-3","groupOrder":2,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765890437225-3","original":"バンコクです。","translation":"B: 曼谷。","groupId":"group-1765890437225","groupTitle":"03-3","groupOrder":3,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765890437225-4","original":"そうですか。","translation":"A: 是吗？","groupId":"group-1765890437225","groupTitle":"03-3","groupOrder":4,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765890936151-0","original":"<ruby>今<rt>いま</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>ですか。","translation":"现在几点？","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":0,"nativePitch":1},{"id":"card-1765890936151-1","original":"2<ruby>時<rt>じ</rt></ruby>10<ruby>分<rt>ぷん</rt></ruby>です。","translation":"两点十分。","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":1,"nativePitch":1},{"id":"card-1765890936151-2","original":"ニューヨークは<ruby>今<rt>いま</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>ですか。","translation":"纽约现在几点？","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":2,"nativePitch":1},{"id":"card-1765890936151-3","original":"<ruby>午前<rt>ごぜん</rt></ruby>0<ruby>時<rt>じ</rt></ruby>10<ruby>分<rt>ぷん</rt></ruby>です。","translation":"凌晨零点十分。","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":3,"nativePitch":1},{"id":"card-1765890936151-4","original":"<ruby>休み<rt>やすみ</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか。","translation":"休息日是星期几？","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":4,"nativePitch":1},{"id":"card-1765890936151-5","original":"<ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>です。","translation":"星期六和星期日。","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":5,"nativePitch":1},{"id":"card-1765890936151-6","original":"アップル<ruby>銀行<rt>ぎんこう</rt></ruby>は<ruby>何時<rt>なんじ</rt></ruby>から<ruby>何時<rt>なんじ</rt></ruby>までですか。","translation":"苹果银行从几点到几点？","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":6,"nativePitch":1},{"id":"card-1765890936151-7","original":"9<ruby>時<rt>じ</rt></ruby>から3<ruby>時<rt>じ</rt></ruby>までです。","translation":"从九点到三点。","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":7,"nativePitch":1},{"id":"card-1765890936151-8","original":"<ruby>毎晩<rt>まいばん</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>ますか。","translation":"每晚几点睡觉？","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":8,"nativePitch":1},{"id":"card-1765890936151-9","original":"11<ruby>時<rt>じ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>ます。","translation":"十一点睡觉。","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":9,"nativePitch":1},{"id":"card-1765890936151-10","original":"<ruby>毎日<rt>まいにち</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>から<ruby>何時<rt>なんじ</rt></ruby>まで<ruby>勉強<rt>べんきょう</rt></ruby>しますか。","translation":"每天从几点到几点学习？","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":10,"nativePitch":1},{"id":"card-1765890936151-11","original":"<ruby>朝<rt>あさ</rt></ruby>9<ruby>時<rt>じ</rt></ruby>から<ruby>午後<rt>ごご</rt></ruby>3<ruby>時<rt>じ</rt></ruby>まで<ruby>勉強<rt>べんきょう</rt></ruby>します。","translation":"从早上九点到下午三点学习。","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":11,"nativePitch":1},{"id":"card-1765890936151-12","original":"<ruby>土曜日<rt>どようび</rt></ruby><ruby>働<rt>はたら</rt></ruby>きますか。","translation":"星期六工作吗？","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":12,"nativePitch":1},{"id":"card-1765890936151-13","original":"……いいえ、<ruby>働<rt>はたら</rt></ruby>きません。","translation":"……不，不工作。","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":13,"nativePitch":1},{"id":"card-1765890936151-14","original":"きのう<ruby>勉強<rt>べんきょう</rt></ruby>しましたか。","translation":"昨天学习了吗？","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":14,"nativePitch":1},{"id":"card-1765890936151-15","original":"……いいえ、<ruby>勉強<rt>べんきょう</rt></ruby>しませんでした。","translation":"……不，没学习。","groupId":"group-1765890658191","groupTitle":"04-1","groupOrder":15,"nativePitch":1},{"id":"card-1765890971092-0","original":"すみません、「あすか」の 電話番号は 何番ですか。","translation":"米勒: 请问，'Asuka'的电话号码是多少？","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":0,"speaker":"ミラー","voiceName":"Puck","nativePitch":1},{"id":"card-1765890971092-1","original":"「あすか」ですか。","translation":"佐藤: 'Asuka'吗？","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":1,"speaker":"佐藤","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765890971092-2","original":"5275の 2725です。","translation":"是5275的2725。","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":2,"speaker":"佐藤","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765890971092-3","original":"どうも ありがとう ございます。","translation":"米勒: 非常感谢。","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":3,"speaker":"ミラー","voiceName":"Puck","nativePitch":1},{"id":"card-1765890971092-4","original":"はい、「あすか」です。","translation":"店员: 您好，这里是'Asuka'。","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":4,"speaker":"店の人","voiceName":"Aoede","nativePitch":1.25},{"id":"card-1765890971092-5","original":"すみません。","translation":"米勒: 请问。","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":5,"speaker":"ミラー","voiceName":"Puck","nativePitch":1},{"id":"card-1765890971092-6","original":"そちらは 何時までですか。","translation":"你们营业到几点？","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":6,"speaker":"ミラー","voiceName":"Puck","nativePitch":1},{"id":"card-1765890971092-7","original":"10時までです。","translation":"店员: 到10点。","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":7,"speaker":"店の人","voiceName":"Aoede","nativePitch":1.25},{"id":"card-1765890971092-8","original":"休みは 何曜日ですか。","translation":"米勒: 休息日是星期几？","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":8,"speaker":"ミラー","voiceName":"Puck","nativePitch":1},{"id":"card-1765890971092-9","original":"日曜日です。","translation":"店员: 星期日。","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":9,"speaker":"店の人","voiceName":"Aoede","nativePitch":1.25},{"id":"card-1765890971092-10","original":"そうですか。どうも。","translation":"米勒: 这样啊。谢谢。","groupId":"group-1765890971091","groupTitle":"04-2-そちらは 何時までですか","groupOrder":10,"speaker":"ミラー","voiceName":"Puck","nativePitch":1},{"id":"card-1765891059504-0","original":"試験は 何時からですか。","translation":"A: 考试从几点开始？","groupId":"group-1765891059504","groupTitle":"04-3","groupOrder":0,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891059504-1","original":"10時からです。","translation":"B: 从10点开始。","groupId":"group-1765891059504","groupTitle":"04-3","groupOrder":1,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891059504-2","original":"何時に 終わりますか。","translation":"A: 几点结束？","groupId":"group-1765891059504","groupTitle":"04-3","groupOrder":2,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891059504-3","original":"12時に 終わります。","translation":"B: 12点结束。","groupId":"group-1765891059504","groupTitle":"04-3","groupOrder":3,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891059504-4","original":"そうですか。どうも。","translation":"A: 这样啊。谢谢。","groupId":"group-1765891059504","groupTitle":"04-3","groupOrder":4,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891085470-0","original":"きのう 12時まで 勉強しました。","translation":"A: 昨天学习到12点。","groupId":"group-1765891085470","groupTitle":"04-4","groupOrder":0,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891085470-1","original":"そうですか。何時に 寝ましたか。","translation":"B: 是吗？几点睡的？","groupId":"group-1765891085470","groupTitle":"04-4","groupOrder":1,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891085470-2","original":"1時に 寝ました。","translation":"A: 1点睡的。","groupId":"group-1765891085470","groupTitle":"04-4","groupOrder":2,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891085470-3","original":"大変ですね。","translation":"B: 真辛苦啊。","groupId":"group-1765891085470","groupTitle":"04-4","groupOrder":3,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765893649604-0","original":"あした どこへ 行きますか。","translation":"明天去哪里？","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":0,"nativePitch":1},{"id":"card-1765893649604-1","original":"奈良へ 行きます。","translation":"去奈良。","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":1,"nativePitch":1},{"id":"card-1765893649604-2","original":"日曜日 どこへ 行きましたか。","translation":"星期天去哪里了？","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":2,"nativePitch":1},{"id":"card-1765893649604-3","original":"どこも 行きませんでした。","translation":"哪里都没去。","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":3,"nativePitch":1},{"id":"card-1765893649604-4","original":"何で 東京へ 行きますか。","translation":"怎么去东京？","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":4,"nativePitch":1},{"id":"card-1765893649604-5","original":"新幹線で 行きます。","translation":"坐新干线去。","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":5,"nativePitch":1},{"id":"card-1765893649604-6","original":"だれと 東京へ 行きますか。","translation":"和谁去东京？","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":6,"nativePitch":1},{"id":"card-1765893649604-7","original":"山田さんと 行きます。","translation":"和山田先生去。","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":7,"nativePitch":1},{"id":"card-1765893649604-8","original":"いつ 日本へ 来ましたか。","translation":"什么时候来日本的？","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":8,"nativePitch":1},{"id":"card-1765893649604-9","original":"3月25日に 来ました。","translation":"3月25日来的。","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":9,"nativePitch":1},{"id":"card-1765893649604-10","original":"誕生日は いつですか。","translation":"生日是什么时候？","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":10,"nativePitch":1},{"id":"card-1765893649604-11","original":"6月13日です。","translation":"6月13日。","groupId":"group-1765891173008","groupTitle":"05-1","groupOrder":11,"nativePitch":1},{"id":"card-1765891308538-0","original":"すみません。甲子園まで いくらですか。","translation":"桑托斯：不好意思。到甲子园多少钱？","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":0,"speaker":"サントス","voiceName":"Puck","nativePitch":1},{"id":"card-1765891308538-1","original":"350円です。","translation":"女士：350日元。","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":1,"speaker":"女の人","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891308538-2","original":"350円ですね。ありがとうございました。","translation":"桑托斯：350日元是吗？非常感谢。","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":2,"speaker":"サントス","voiceName":"Puck","nativePitch":1},{"id":"card-1765891308538-3","original":"どう いたしまして。","translation":"女士：不客气。","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":3,"speaker":"女の人","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891308538-4","original":"すみません。甲子園は 何番線ですか。","translation":"桑托斯：不好意思。甲子园是几号站台？","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":4,"speaker":"サントス","voiceName":"Puck","nativePitch":1},{"id":"card-1765891308538-5","original":"5番線です。","translation":"站务员：5号站台。","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":5,"speaker":"駅員","voiceName":"Kore","nativePitch":1.2},{"id":"card-1765891308538-6","original":"どうも。","translation":"桑托斯：谢谢。","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":6,"speaker":"サントス","voiceName":"Puck","nativePitch":1},{"id":"card-1765891308538-7","original":"あのう、この 電車は 甲子園へ 行きますか。","translation":"桑托斯：那个，这趟电车去甲子园吗？","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":7,"speaker":"サントス","voiceName":"Puck","nativePitch":1},{"id":"card-1765891308538-8","original":"いいえ。次の「普通」ですよ。","translation":"男士：不。是下一趟“普通”列车。","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":8,"speaker":"男の人","voiceName":"Puck","nativePitch":1},{"id":"card-1765891308538-9","original":"そうですか。","translation":"桑托斯：是这样啊。","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":9,"speaker":"サントス","voiceName":"Puck","nativePitch":1},{"id":"card-1765891308538-10","original":"どうも。","translation":"谢谢。","groupId":"group-1765891308537","groupTitle":"05-2-この 電車は 甲子園へ 行きますか","groupOrder":10,"speaker":"サントス","voiceName":"Puck","nativePitch":1},{"id":"card-1765891468988-0","original":"先週東京へ行きました。","translation":"A: 我上周去了东京。","groupId":"group-1765891468988","groupTitle":"05-3","groupOrder":0,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891468988-1","original":"これ、お土産です。","translation":"这是给您的伴手礼。","groupId":"group-1765891468988","groupTitle":"05-3","groupOrder":1,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891468988-2","original":"どうぞ。","translation":"请收下。","groupId":"group-1765891468988","groupTitle":"05-3","groupOrder":2,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891468988-3","original":"ありがとう ございます。","translation":"B: 谢谢您。","groupId":"group-1765891468988","groupTitle":"05-3","groupOrder":3,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891468988-4","original":"一人で行きましたか。","translation":"您一个人去的吗？","groupId":"group-1765891468988","groupTitle":"05-3","groupOrder":4,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891468988-5","original":"いいえ、友達と行きました。","translation":"A: 不，我是和朋友一起去的。","groupId":"group-1765891468988","groupTitle":"05-3","groupOrder":5,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891468988-6","original":"何で行きましたか。","translation":"B: 您是怎么去的？","groupId":"group-1765891468988","groupTitle":"05-3","groupOrder":6,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891468988-7","original":"バスで行きました。","translation":"A: 我是坐巴士去的。","groupId":"group-1765891468988","groupTitle":"05-3","groupOrder":7,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891523437-0","original":"お国はどちらですか。","translation":"A: 您的国家是哪里？","groupId":"group-1765891523437","groupTitle":"05-4","groupOrder":0,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891523437-1","original":"アメリカです。","translation":"B: 美国。","groupId":"group-1765891523437","groupTitle":"05-4","groupOrder":1,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2},{"id":"card-1765891523437-2","original":"そうですか。いつ日本へ来ましたか。","translation":"A: 是吗？您是什么时候来日本的？","groupId":"group-1765891523437","groupTitle":"05-4","groupOrder":2,"speaker":"A","voiceName":"Puck","nativePitch":1},{"id":"card-1765891523437-3","original":"去年の9月に来ました。","translation":"B: 去年9月来的。","groupId":"group-1765891523437","groupTitle":"05-4","groupOrder":3,"speaker":"B","voiceName":"Fenrir","nativePitch":1.2}];
+    const SETTINGS = {"language":"ja-JP","playbackSpeed":1};
 
-    <div class="header">
-        <div class="title-bar" id="pageTitle">第1-5课 综合练习</div>
-        <div class="filter-bar">
-            <!-- 课程筛选器 -->
-            <label class="filter-label checked" onclick="toggleFilter(this, 1)">
-                <input type="checkbox" checked hidden> 第1课
-            </label>
-            <label class="filter-label checked" onclick="toggleFilter(this, 2)">
-                <input type="checkbox" checked hidden> 第2课
-            </label>
-            <label class="filter-label checked" onclick="toggleFilter(this, 3)">
-                <input type="checkbox" checked hidden> 第3课
-            </label>
-            <label class="filter-label checked" onclick="toggleFilter(this, 4)">
-                <input type="checkbox" checked hidden> 第4课
-            </label>
-            <label class="filter-label checked" onclick="toggleFilter(this, 5)">
-                <input type="checkbox" checked hidden> 第5课
-            </label>
-        </div>
-    </div>
+    const Player = () => {
+      const [currentIndex, setCurrentIndex] = useState(0);
+      const [isPlaying, setIsPlaying] = useState(false);
+      const [isLoop, setIsLoop] = useState(false);
+      const [isShuffle, setIsShuffle] = useState(false);
+      const [availableVoices, setAvailableVoices] = useState([]);
+      
+      const [selectedGroupId, setSelectedGroupId] = useState("ALL");
+      
+      // Visibility
+      const [showOriginal, setShowOriginal] = useState(false);
+      const [showTrans, setShowTrans] = useState(false);
+      const [localShowOriginal, setLocalShowOriginal] = useState(false);
+      const [localShowTrans, setLocalShowTrans] = useState(false);
 
-    <div class="container">
-        <div id="cardArea" class="card"></div>
-    </div>
+      // Data Prep
+      const groups = useMemo(() => {
+        const map = new Map();
+        INITIAL_DATA.forEach(c => {
+           if(c.groupId && c.groupTitle) map.set(c.groupId, c.groupTitle);
+        });
+        return Array.from(map.entries()).map(([id, title]) => ({id, title}));
+      }, []);
 
-    <div class="controls">
-        <div id="status-bar">准备就绪</div>
-        <div class="row">
-            <button class="btn-toggle" id="btnJp" onclick="toggleGlobal('jp')">全显日文</button>
-            <button class="btn-toggle" id="btnCn" onclick="toggleGlobal('cn')">全显中文</button>
-            <button class="btn-blue" onclick="shuffleAndReset()">🔀 打乱重来</button>
-        </div>
-        <div class="row">
-            <button class="btn-nav" onclick="changeCard(-1)">⬅️ 上一条</button>
-            <button class="btn-nav" onclick="changeCard(1)">下一条 ➡️</button>
-        </div>
-    </div>
+      const activeCards = useMemo(() => {
+         if(selectedGroupId === 'ALL') return INITIAL_DATA;
+         return INITIAL_DATA.filter(c => c.groupId === selectedGroupId);
+      }, [selectedGroupId]);
 
-    <script>
-        // ===============================================
-        // 全量数据：Lesson 1 - 5
-        // ===============================================
-        const rawData = [
-            // === 第1课 ===
-            { lesson: 1, category: '例文 1', lines: [{ role: 'Q', gender: 'f', jp: 'あなたは　マイク・ミラーさんですか。', cn: '你是迈克·米勒先生吗？' }, { role: 'A', gender: 'm', jp: '…はい、[わたしは] マイク・ミラーです。', cn: '…是的，[我]是迈克·米勒。' }] },
-            { lesson: 1, category: '例文 2', lines: [{ role: 'Q', gender: 'f', jp: 'ミラーさんは　学生ですか。', cn: '米勒先生是学生吗？' }, { role: 'A', gender: 'm', jp: '…いいえ、[わたしは] 学生じゃ　ありません。', cn: '…不，[我]不是学生。' }] },
-            { lesson: 1, category: '例文 3', lines: [{ role: 'Q', gender: 'f', jp: 'ワンさんは　エンジニアですか。', cn: '王先生是工程师吗？' }, { role: 'A', gender: 'm', jp: '…いいえ、ワンさんは　エンジニアじゃ　ありません。', cn: '…不，王先生不是工程师。' }] },
-            { lesson: 1, category: '例文 4', lines: [{ role: 'Q', gender: 'f', jp: 'あの方は　どなたですか。', cn: '那位是谁？' }, { role: 'A', gender: 'm', jp: '…ワットさんです。さくら大学の　先生です。', cn: '…是瓦特先生。樱花大学的老师。' }] },
-            { lesson: 1, category: '例文 5', lines: [{ role: 'Q', gender: 'f', jp: 'テレサちゃんは　何歳ですか。', cn: '特蕾莎几岁了？' }, { role: 'A', gender: 'm', jp: '…9歳です。', cn: '…9岁。' }] },
-            { lesson: 1, category: '会话：初次见面', lines: [{ role: '佐藤', gender: 'f', jp: 'おはよう　ございます。', cn: '早上好。' }, { role: '山田', gender: 'm', jp: 'おはよう　ございます。', cn: '早上好。' }, { role: '佐藤', gender: 'f', jp: 'こちらは　マイク・ミラーさんです。', cn: '这位是迈克·米勒先生。' }, { role: 'ミラー', gender: 'm', jp: '初めまして。', cn: '初次见面。' }, { role: 'ミラー', gender: 'm', jp: 'マイク・ミラーです。', cn: '我是迈克·米勒。' }, { role: 'ミラー', gender: 'm', jp: 'アメリカから　来ました。', cn: '我从美国来。' }, { role: 'ミラー', gender: 'm', jp: 'どうぞ　よろしく。', cn: '请多关照。' }, { role: '佐藤', gender: 'f', jp: '佐藤けい子です。どうぞ　よろしく。', cn: '我是佐藤惠子。请多关照。' }]},
+      const playbackQueue = useMemo(() => {
+         // 1. If shuffle is OFF, return indices [0, 1, 2...]
+         if (!isShuffle) return activeCards.map((_, i) => i);
 
-            // === 第2课 ===
-            { lesson: 2, category: '例文 1', lines: [{ role: 'Q', gender: 'f', jp: 'これは ボールペンですか。', cn: '这是圆珠笔吗？' }, { role: 'A', gender: 'm', jp: '…はい、そうです。', cn: '…是的，是圆珠笔。' }] },
-            { lesson: 2, category: '例文 2', lines: [{ role: 'Q', gender: 'f', jp: 'それは ノートですか。', cn: '那是笔记本吗？' }, { role: 'A', gender: 'm', jp: '…いいえ、[これは] 手帳です。', cn: '…不，[这是] 记事本。' }] },
-            { lesson: 2, category: '例文 3', lines: [{ role: 'Q', gender: 'f', jp: 'それは 何ですか。', cn: '那是什么？' }, { role: 'A', gender: 'm', jp: '…[これは] 名刺です。', cn: '…[这是] 名片。' }] },
-            { lesson: 2, category: '例文 4', lines: [{ role: 'Q', gender: 'f', jp: 'あれは だれの かばんですか。', cn: '那是个谁的包？' }, { role: 'A', gender: 'm', jp: '…佐藤さんの かばんです。', cn: '…是佐藤先生/女士的包。' }] },
-            { lesson: 2, category: '例文 5', lines: [{ role: 'Q', gender: 'f', jp: 'この かぎは だれのですか。', cn: '这把钥匙是谁的？' }, { role: 'A', gender: 'm', jp: '…わたしのです。', cn: '…是我的。' }] },
-            { lesson: 2, category: '会话：从今起承蒙关照', lines: [{ role: 'サントス', gender: 'm', jp: 'こんにちは。サントスです。', cn: '你好。我是桑托斯。' }, { role: 'サントス', gender: 'm', jp: 'これから お世話に なります。', cn: '今后请你多关照。' }, { role: '山田', gender: 'm', jp: 'こちらこそ よろしく お願いします。', cn: '哪里哪里，也请你多多指教。' }, { role: 'サントス', gender: 'm', jp: 'あのう、これ、コーヒーです。どうぞ。', cn: '那个……这点心意，是咖啡。请收下。' }]},
+         // 2. Group Shuffle Logic
+         const groupMap = new Map();
+         let ungroupedCounter = 0;
 
-            // === 第3课 ===
-            { lesson: 3, category: '练习 1', lines: [{ role: 'Q', gender: 'f', jp: 'ここは　新大阪ですか。', cn: '这里是新大阪吗？' }, { role: 'A', gender: 'm', jp: '…はい、そうです。', cn: '…是的，没错。' }]},
-            { lesson: 3, category: '练习 2', lines: [{ role: 'Q', gender: 'f', jp: 'トイレは　どこですか。', cn: '洗手间在哪里？' }, { role: 'A', gender: 'm', jp: '…あそこです。', cn: '…在那边。' }]},
-            { lesson: 3, category: '练习 3', lines: [{ role: 'Q', gender: 'f', jp: '山田さんは　どこですか。', cn: '山田先生在哪里？' }, { role: 'A', gender: 'm', jp: '…会議室です。', cn: '…在会议室。' }]},
-            { lesson: 3, category: '练习 4', lines: [{ role: 'Q', gender: 'f', jp: '[お]国は　どちらですか。', cn: '您是哪个国家的？' }, { role: 'A', gender: 'm', jp: '…アメリカです。', cn: '…是美国。' }]},
-            { lesson: 3, category: '练习 5', lines: [{ role: 'Q', gender: 'm', jp: 'それは　どこの　靴ですか。', cn: '那是哪里的鞋子？' }, { role: 'A', gender: 'f', jp: '…イタリアの　靴です。', cn: '…是意大利的鞋子。' }]},
-            { lesson: 3, category: '练习 6', lines: [{ role: 'Q', gender: 'f', jp: 'この　時計は　いくらですか。', cn: '这块手表多少钱？' }, { role: 'A', gender: 'm', jp: '…18,600円です。', cn: '…是18,600日元。' }]},
-            { lesson: 3, category: '会话：请给我这个', lines: [{ role: 'マリア', gender: 'f', jp: 'すみません。ワイン売り場は　どこですか。', cn: '打扰一下。请问卖红酒的柜台在哪里？' }, { role: '店員', gender: 'm', jp: '地下１階です。', cn: '在地下1层。' }, { role: 'マリア', gender: 'f', jp: 'その　ワインを　見せて　ください。', cn: '请让我看看那瓶红酒。' }, { role: 'マリア', gender: 'f', jp: 'これは　どこの　ワインですか。', cn: '这是哪里的红酒？' }, { role: '店員', gender: 'm', jp: '日本のです。', cn: '是日本的。' }, { role: 'マリア', gender: 'f', jp: 'じゃ、これを　ください。', cn: '那么，请给我这瓶。' }]},
+         activeCards.forEach((card, index) => {
+             let key = card.groupId;
+             if (!key) {
+                 key = '__ungrouped_' + (ungroupedCounter++);
+             }
+             if (!groupMap.has(key)) {
+                 groupMap.set(key, []);
+             }
+             // Store the index relative to activeCards
+             groupMap.get(key).push(index);
+         });
 
-            // === 第4课 ===
-            { lesson: 4, category: '练习 1', lines: [{ role: 'Q', gender: 'f', jp: '今　何時ですか。', cn: '现在几点？' }, { role: 'A', gender: 'm', jp: '2時10分です。', cn: '2点10分。' }]},
-            { lesson: 4, category: '练习 2', lines: [{ role: 'Q', gender: 'f', jp: '休みは　何曜日ですか。', cn: '休息日是星期几？' }, { role: 'A', gender: 'm', jp: '土曜日と　日曜日です。', cn: '是星期六和星期日。' }]},
-            { lesson: 4, category: '练习 3', lines: [{ role: 'Q', gender: 'f', jp: '銀行は　何時から　何時までですか。', cn: '银行从几点到几点营业？' }, { role: 'A', gender: 'm', jp: '9時から　3時までです。', cn: '从9点到3点。' }]},
-            { lesson: 4, category: '练习 4', lines: [{ role: 'Q', gender: 'f', jp: '毎晩　何時に　寝ますか。', cn: '每晚几点睡觉？' }, { role: 'A', gender: 'm', jp: '11時に　寝ます。', cn: '11点睡觉。' }]},
-            { lesson: 4, category: '练习 5', lines: [{ role: 'Q', gender: 'f', jp: '土曜日　働きますか。', cn: '星期六工作吗？' }, { role: 'A', gender: 'm', jp: '…いいえ、働きません。', cn: '…不，不工作。' }]},
-            { lesson: 4, category: '练习 6', lines: [{ role: 'Q', gender: 'f', jp: 'きのう　勉強しましたか。', cn: '昨天学习了吗？' }, { role: 'A', gender: 'm', jp: '…いいえ、勉強しませんでした。', cn: '…不，没学习。' }]},
-            { lesson: 4, category: '会话：营业到几点', lines: [{ role: 'ミラー', gender: 'm', jp: 'すみません。そちらは　何時までですか。', cn: '请问，你们那里营业到几点？' }, { role: '店の人', gender: 'f', jp: '10時までです。', cn: '到10点。' }, { role: 'ミラー', gender: 'm', jp: '休みは　何曜日ですか。', cn: '休息日是星期几？' }, { role: '店の人', gender: 'f', jp: '日曜日です。', cn: '是星期天。' }]},
+         const keys = Array.from(groupMap.keys());
+         // Fisher-Yates shuffle
+         for (let i = keys.length - 1; i > 0; i--) {
+             const j = Math.floor(Math.random() * (i + 1));
+             [keys[i], keys[j]] = [keys[j], keys[i]];
+         }
 
-            // === 第5课 ===
-            { lesson: 5, category: '练习 1', lines: [{ role: 'Q', gender: 'f', jp: 'あした　どこへ　行きますか。', cn: '明天去哪里？' }, { role: 'A', gender: 'm', jp: '奈良へ　行きます。', cn: '去奈良。' }]},
-            { lesson: 5, category: '练习 2', lines: [{ role: 'Q', gender: 'f', jp: '日曜日　どこへ　行きましたか。', cn: '星期天去了哪里？' }, { role: 'A', gender: 'm', jp: '…どこ[へ]も　行きませんでした。', cn: '…哪里也没去。' }]},
-            { lesson: 5, category: '练习 3', lines: [{ role: 'Q', gender: 'f', jp: '何で　東京へ　行きますか。', cn: '怎么去东京？' }, { role: 'A', gender: 'm', jp: '新幹線で　行きます。', cn: '坐新干线去。' }]},
-            { lesson: 5, category: '练习 4', lines: [{ role: 'Q', gender: 'f', jp: 'だれと　東京へ　行きますか。', cn: '和谁一起去东京？' }, { role: 'A', gender: 'm', jp: '山田さんと　行きます。', cn: '和山田先生/女士一起去。' }]},
-            { lesson: 5, category: '练习 5', lines: [{ role: 'Q', gender: 'f', jp: 'いつ　日本へ　来ましたか。', cn: '什么时候来的日本？' }, { role: 'A', gender: 'm', jp: '3月25日に　来ました。', cn: '3月25日来的。' }]},
-            { lesson: 5, category: '会话：去甲子园吗', lines: [{ role: 'サントス', gender: 'm', jp: 'すみません。甲子園まで　いくらですか。', cn: '打扰一下。到甲子园多少钱？' }, { role: '女の人', gender: 'f', jp: '350円です。', cn: '350日元。' }, { role: 'サントス', gender: 'm', jp: '甲子園は　何番線ですか。', cn: '甲子园在几号站台？' }, { role: '駅員', gender: 'm', jp: '5番線です。', cn: '5号站台。' }, { role: 'サントス', gender: 'm', jp: 'この　電車は　甲子園へ　行きますか。', cn: '这趟电车去甲子园吗？' }, { role: '男の人', gender: 'm', jp: 'いいえ。次の　「普通」ですよ。', cn: '不。下一趟“普通”列车才去。' }]},
-        ];
+         const result = [];
+         keys.forEach(key => {
+             result.push(...groupMap.get(key));
+         });
+         return result;
+      }, [activeCards, isShuffle]);
 
-        // ================= 逻辑变量 =================
-        let activeData = [];
-        let currentIndex = 0;
-        let globalShowJp = false;
-        let globalShowCn = false;
-        let isSeqPlaying = false;
-        let selectedLessons = [1, 2, 3, 4, 5];
-        let voices = { male: null, female: null, default: null };
+      const currentCardIndex = playbackQueue[currentIndex];
+      const card = activeCards[currentCardIndex] || {};
 
-        // ================= 初始化与筛选 =================
-        function init() {
-            // 首次加载，默认全选，保持顺序
-            filterData();
-            loadVoices();
-        }
+      // Reset when filter changes
+      useEffect(() => { setCurrentIndex(0); setIsPlaying(false); }, [selectedGroupId, isShuffle]);
+      
+      // Voice Init
+      useEffect(() => {
+         const load = () => {
+            const v = window.speechSynthesis.getVoices();
+            if(v.length) setAvailableVoices(v);
+         };
+         load();
+         window.speechSynthesis.onvoiceschanged = load;
+      }, []);
 
-        function toggleFilter(label, lessonNum) {
-            const checkbox = label.querySelector('input');
-            checkbox.checked = !checkbox.checked; // 手动切换状态，因为input hidden了
-            
-            if (checkbox.checked) {
-                label.classList.add('checked');
-                if(!selectedLessons.includes(lessonNum)) selectedLessons.push(lessonNum);
+      // Reset visibility on card change
+      useEffect(() => {
+         setLocalShowOriginal(false);
+         setLocalShowTrans(false);
+         // If already playing (auto-advance), triggers speak automatically via this effect
+         if(isPlaying) speak();
+      }, [currentCardIndex]);
+
+      const speak = () => {
+         window.speechSynthesis.cancel();
+         const text = (card.original || "").replace(/<[^>]+>/g, '');
+         if(!text) return;
+
+         const u = new SpeechSynthesisUtterance(text);
+         u.lang = SETTINGS.language;
+         u.rate = SETTINGS.playbackSpeed;
+         u.pitch = card.nativePitch || 1.0;
+         
+         // Simple Voice Matching
+         if(availableVoices.length > 0) {
+            const langCode = SETTINGS.language.split('-')[0];
+            const voices = availableVoices.filter(v => v.lang.startsWith(langCode));
+            if(voices.length > 0) {
+               // Try match gender based on pitch
+               if(u.pitch > 1.1) {
+                  const f = voices.find(v => v.name.match(/female|woman/i)) || voices[0];
+                  u.voice = f;
+               } else {
+                   const m = voices.find(v => !v.name.match(/female|woman/i)) || voices[0];
+                   u.voice = m;
+               }
+            }
+         }
+
+         u.onend = () => {
+            // Only auto-advance if Loop/AutoPlay is ENABLED
+            if (isLoop) {
+                setTimeout(() => handleNext(true), 500);
             } else {
-                label.classList.remove('checked');
-                selectedLessons = selectedLessons.filter(l => l !== lessonNum);
+                // Otherwise stop playing
+                setIsPlaying(false);
             }
-            selectedLessons.sort((a,b) => a-b);
-            
-            // 重新生成数据池，默认不打乱，重置到第一张
-            filterData();
-        }
+         };
+         
+         setIsPlaying(true);
+         window.speechSynthesis.speak(u);
+      };
 
-        function filterData(shuffle = false) {
-            // 1. 筛选
-            let temp = rawData.filter(item => selectedLessons.includes(item.lesson));
-            
-            // 2. 乱序 (如果需要)
-            if (shuffle) {
-                for (let i = temp.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [temp[i], temp[j]] = [temp[j], temp[i]];
-                }
-            }
-
-            activeData = temp;
-            currentIndex = 0;
-            render();
-        }
-
-        function shuffleAndReset() {
-            filterData(true);
-            // 视觉反馈
-            const btn = document.querySelector('.btn-blue');
-            const originalText = btn.innerText;
-            btn.innerText = "✅ 已打乱";
-            setTimeout(() => btn.innerText = originalText, 1000);
-        }
-
-        // ================= 语音引擎 =================
-        function loadVoices() {
-            const all = window.speechSynthesis.getVoices();
-            const ja = all.filter(v => v.lang.includes('ja'));
-            if (ja.length > 0) {
-                voices.female = ja.find(v => v.name.includes('Kyoko') || v.name.includes('Female')) || ja[0];
-                voices.male = ja.find(v => v.name.includes('Otoya') || v.name.includes('Male')) || ja[0];
-                voices.default = ja[0];
-                document.getElementById('status-bar').innerText = "✅ 语音加载完成";
-            }
-        }
-        if (window.speechSynthesis.onvoiceschanged !== undefined) window.speechSynthesis.onvoiceschanged = loadVoices;
-
-        function speak(text, gender, callback) {
+      const togglePlay = () => {
+         if(isPlaying) {
             window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = 'ja-JP';
-            u.rate = 0.9;
-            
-            if (gender === 'm' && voices.male) u.voice = voices.male;
-            else if (gender === 'f' && voices.female) u.voice = voices.female;
-            else if (voices.default) u.voice = voices.default;
+            setIsPlaying(false);
+         } else {
+            speak();
+         }
+      };
 
-            u.pitch = (gender === 'm') ? 0.95 : 1.05;
-            if (callback) u.onend = callback;
-            window.speechSynthesis.speak(u);
-        }
+      const handleNext = (auto = false) => {
+          if (currentIndex < playbackQueue.length - 1) {
+              setCurrentIndex(c => c + 1);
+          } else if (auto || isLoop) {
+              setCurrentIndex(0);
+          } else {
+              setIsPlaying(false);
+          }
+      };
 
-        // ================= 渲染逻辑 =================
-        function render() {
-            window.speechSynthesis.cancel();
-            isSeqPlaying = false;
-            
-            const cardArea = document.getElementById('cardArea');
-            const pageTitle = document.getElementById('pageTitle');
+      const handlePrev = () => {
+          if (currentIndex > 0) setCurrentIndex(c => c - 1);
+      };
 
-            if (activeData.length === 0) {
-                cardArea.innerHTML = `<div class="empty-tip">请至少选择一课</div>`;
-                pageTitle.innerText = "未选择课程";
-                return;
-            }
-            
-            const data = activeData[currentIndex];
-            pageTitle.innerText = `进度: ${currentIndex + 1} / ${activeData.length}`;
-            
-            updateGlobalBtns();
+      const isOriginalVisible = showOriginal || localShowOriginal;
+      const isTransVisible = showTrans || localShowTrans;
 
-            let html = `
-                <div class="lesson-badge">第${data.lesson}课</div>
-                <div class="tag">${data.category}</div>
-                <button class="btn-green" onclick="playSequence()">▶️ 完整播放 (包含停顿)</button>
-                <div style="text-align:left; width:100%;">
-            `;
+      if(!card) return React.createElement("div", {className:"p-10 text-center"}, "No Data");
 
-            data.lines.forEach((line, idx) => {
-                const jpClass = globalShowJp ? 'text-block jp-text' : 'text-block jp-text masked';
-                const cnClass = globalShowCn ? 'text-block cn-text' : 'text-block cn-text masked';
-                let roleClass = line.gender === 'm' ? 'role-m' : 'role-f';
-                
-                html += `
-                    <div class="dialogue-row" id="row-${idx}">
-                        <div class="play-col"><div class="play-icon" onclick="playLine(${idx})">🔊</div></div>
-                        <div class="text-col">
-                            ${line.role ? `<span class="role-tag ${roleClass}">${line.role}</span>` : ''}
-                            <div class="${jpClass}" onclick="toggleOne(this)">${line.jp}</div>
-                            <div class="${cnClass}" onclick="toggleOne(this)">${line.cn}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            html += `</div>`;
-            cardArea.innerHTML = html;
-        }
+      return React.createElement("div", {className:"max-w-md mx-auto h-full flex flex-col p-4 relative"},
+         // Header
+         React.createElement("div", {className:"flex justify-between items-center mb-4 bg-white/90 border-4 border-white rounded-full shadow-toon p-2 transform -rotate-1"},
+             React.createElement("span", {className:"font-black text-[#E53030] text-xl ml-4"}, `${currentIndex + 1} / ${playbackQueue.length}`),
+             groups.length > 0 ? React.createElement("select", {
+                 value: selectedGroupId,
+                 onChange: (e) => setSelectedGroupId(e.target.value),
+                 className: "bg-[#FFF9C4] border-2 border-white text-orange-600 font-black text-xs py-1 px-2 rounded-xl outline-none"
+             }, 
+               React.createElement("option", {value: "ALL"}, "All"),
+               groups.map(g => React.createElement("option", {key: g.id, value: g.id}, g.title))
+             ) : null
+         ),
 
-        // ================= 交互逻辑 =================
-        function toggleOne(el) { 
-            if(el.classList.contains('masked')) el.classList.remove('masked');
-            else el.classList.add('masked');
-        }
-        function toggleGlobal(type) { 
-            if (type === 'jp') globalShowJp = !globalShowJp; 
-            if (type === 'cn') globalShowCn = !globalShowCn; 
-            render(); 
-        }
-        function updateGlobalBtns() {
-            const bJ = document.getElementById('btnJp'); const bC = document.getElementById('btnCn');
-            bJ.className = globalShowJp ? 'btn-toggle active' : 'btn-toggle'; bC.className = globalShowCn ? 'btn-toggle active' : 'btn-toggle';
-            bJ.innerText = globalShowJp ? '全显日文' : '全隐日文'; bC.innerText = globalShowCn ? '全显中文' : '全隐中文';
-        }
-        function playLine(idx) {
-            isSeqPlaying = false; highlightRow(idx);
-            const data = activeData[currentIndex]; const line = data.lines[idx];
-            speak(line.jp, line.gender, () => { unhighlightRow(idx); });
-        }
-        function playSequence() {
-            isSeqPlaying = true; const data = activeData[currentIndex]; let idx = 0;
-            document.querySelectorAll('.dialogue-row').forEach(e => e.classList.remove('playing-row'));
-            function next() {
-                if (!isSeqPlaying || idx >= data.lines.length) { isSeqPlaying = false; if(idx > 0) unhighlightRow(idx-1); return; }
-                if (idx > 0) unhighlightRow(idx-1); highlightRow(idx);
-                document.getElementById(`row-${idx}`).scrollIntoView({behavior: "smooth", block: "center"});
-                const line = data.lines[idx];
-                speak(line.jp, line.gender, () => { idx++; setTimeout(next, 600); });
-            }
-            next();
-        }
-        function highlightRow(idx) { const el = document.getElementById(`row-${idx}`); if (el) el.classList.add('playing-row'); }
-        function unhighlightRow(idx) { const el = document.getElementById(`row-${idx}`); if (el) el.classList.remove('playing-row'); }
-        function changeCard(dir) { 
-            const next = currentIndex + dir; 
-            if (next >= 0 && next < activeData.length) { currentIndex = next; render(); } 
-        }
+         // Progress
+         React.createElement("div", {className:"w-full h-5 bg-white rounded-full mb-6 overflow-hidden border-4 border-white shadow-inner transform rotate-1"},
+            React.createElement("div", {className:"h-full bg-gradient-to-r from-[#FFAEC8] to-[#E53030] transition-all", style:{width: `${((currentIndex + 1) / playbackQueue.length) * 100}%`}})
+         ),
 
-        // 启动
-        setTimeout(init, 100);
-    </script>
+         // Content
+         React.createElement("div", {className:"flex-1 overflow-y-auto space-y-4 pb-32 no-scrollbar"},
+             // Play Button
+             React.createElement("div", {className:"piggy-card p-8 flex flex-col items-center justify-center bg-[#FFF9C4] transform rotate-1"},
+                 React.createElement("button", {onClick: togglePlay, className: `w-24 h-24 rounded-full flex items-center justify-center transition-all border-4 border-white shadow-toon piggy-btn ${isPlaying ? 'bg-[#E53030]' : 'bg-[#E53030]'}`},
+                     isPlaying ? React.createElement(Pause, {className:"text-white w-10 h-10"}) : React.createElement(Play, {className:"text-white w-10 h-10 ml-1"})
+                 )
+             ),
+             // Original
+             React.createElement("div", {
+                 onClick: () => setLocalShowOriginal(!localShowOriginal),
+                 className: `piggy-card p-6 min-h-[120px] flex items-center justify-center cursor-pointer transform -rotate-1 ${isOriginalVisible ? 'bg-[#DCEDC8]' : 'bg-[#DCEDC8] border-dashed opacity-80'}`
+             }, isOriginalVisible ? 
+                React.createElement("div", {className:"text-xl font-black text-[#558B2F] text-center", dangerouslySetInnerHTML:{__html: card.original}}) : 
+                React.createElement(Eye, {className:"text-[#558B2F] opacity-50"})
+             ),
+             // Trans
+             React.createElement("div", {
+                 onClick: () => setLocalShowTrans(!localShowTrans),
+                 className: `piggy-card p-6 min-h-[100px] flex items-center justify-center cursor-pointer transform rotate-1 ${isTransVisible ? 'bg-[#FFCCBC]' : 'bg-[#FFCCBC] border-dashed opacity-80'}`
+             }, isTransVisible ? 
+                React.createElement("div", {className:"text-lg font-black text-[#BF360C] text-center"}, card.translation) : 
+                React.createElement(Eye, {className:"text-[#BF360C] opacity-50"})
+             )
+         ),
+
+         // Footer
+         React.createElement("div", {className:"fixed bottom-6 left-4 right-4"},
+             // Global Toggles
+             React.createElement("div", {className:"flex justify-center gap-3 mb-3"},
+                 React.createElement("button", {onClick: () => setShowOriginal(!showOriginal), className:`px-4 py-2 rounded-xl text-xs font-black border-4 shadow-toon transform -rotate-1 ${showOriginal ? 'bg-[#7FC241] text-white border-white' : 'bg-white text-slate-400 border-white'}`}, "原文"),
+                 React.createElement("button", {onClick: () => setShowTrans(!showTrans), className:`px-4 py-2 rounded-xl text-xs font-black border-4 shadow-toon transform rotate-1 ${showTrans ? 'bg-[#FFAEC8] text-white border-white' : 'bg-white text-slate-400 border-white'}`}, "译文")
+             ),
+             // Controls
+             React.createElement("div", {className:"max-w-md mx-auto flex justify-between items-center gap-2 bg-white/90 p-3 rounded-[2rem] border-4 border-white shadow-2xl backdrop-blur-sm transform rotate-1"},
+                 React.createElement("button", {onClick: handlePrev, disabled: currentIndex===0, className:"w-12 h-12 rounded-full bg-[#A2D2FF] text-white flex items-center justify-center disabled:opacity-50 border-2 border-white piggy-btn"}, React.createElement(SkipBack)),
+                 React.createElement("button", {onClick: () => setIsShuffle(!isShuffle), className:`w-14 h-12 rounded-2xl flex items-center justify-center border-2 border-white piggy-btn ${isShuffle ? 'bg-[#F9E05E] text-[#D97706]' : 'bg-slate-100 text-slate-400'}`}, React.createElement(Shuffle)),
+                 React.createElement("button", {onClick: () => setIsLoop(!isLoop), className:`w-14 h-12 rounded-2xl flex items-center justify-center border-2 border-white piggy-btn ${isLoop ? 'bg-[#7FC241] text-white' : 'bg-slate-100 text-slate-400'}`}, React.createElement(InfinityIcon)),
+                 React.createElement("button", {onClick: () => handleNext(false), disabled: !isLoop && currentIndex === playbackQueue.length - 1, className:"w-12 h-12 rounded-full bg-[#E53030] text-white flex items-center justify-center disabled:opacity-50 border-2 border-white piggy-btn"}, React.createElement(SkipForward))
+             )
+         )
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(React.createElement(Player));
+  </script>
 </body>
 </html>
